@@ -1,7 +1,14 @@
 import { model, Schema } from "mongoose";
-import { IUser } from "../interfaces/user.interface";
+import { IAddress, IUser } from "../interfaces/user.interface";
 import validator from 'validator';
 
+const addressSchema = new Schema<IAddress>({
+    city : String,
+    country : String,
+    zip : Number
+}, {
+    _id : false
+})
 
 const userSchema = new Schema<IUser>({
     firstName: {
@@ -27,7 +34,7 @@ const userSchema = new Schema<IUser>({
         lowercase: true,
         required: true,
         trim: true,
-        validate : [validator.isEmail, "{VALUE} is not a valid email"]
+        validate: [validator.isEmail, "{VALUE} is not a valid email"]
         // validate: {
         //     validator: function (value) {
         //         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
@@ -50,7 +57,13 @@ const userSchema = new Schema<IUser>({
             message: "Role is not valid, get {VALUE}"
         },
         default: "USER"
+    }, 
+    address : {
+        type : addressSchema
     }
+}, {
+    versionKey: false,
+    timestamps: true
 });
 
 
